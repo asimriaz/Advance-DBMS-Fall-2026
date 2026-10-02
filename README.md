@@ -1,6 +1,6 @@
 # Functions and Procedures
 
-This tutorial uses one small `employees` table. Run the setup first, then run each example in order. The examples work in PostgreSQL 18 and use `PL/pgSQL`, PostgreSQL’s procedural language. :chatgpt-content-reference{index="0"}
+This tutorial uses one small `employees` table. Run the setup first, then run each example in order. The examples work in PostgreSQL 18 and use `PL/pgSQL`, PostgreSQL’s procedural language. 
 
 ## 1. Set up the practice data
 
@@ -43,7 +43,7 @@ The examples that change salaries show how to restore the starting values before
 | Typical classroom example | Calculate annual salary | Give an employee a raise |
 | Transaction control inside routine | Cannot `COMMIT` or `ROLLBACK` | Possible under specific calling rules |
 
-A function can also change table data; the distinction is **not** that functions are read-only. Procedures are particularly useful when the operation is naturally an action and, when permitted, needs transaction control. :chatgpt-content-reference{index="1"}
+A function can also change table data; the distinction is **not** that functions are read-only. Procedures are particularly useful when the operation is naturally an action and, when permitted, needs transaction control. 
 
 ---
 
@@ -70,7 +70,7 @@ $$;
 - `CREATE OR REPLACE` lets you update a function while developing it.
 - `DECLARE` is optional.
 - `BEGIN` and `END` mark the PL/pgSQL code block. They **do not** start and commit a database transaction.
-- `$$` surrounds the function body, so ordinary single quotes can appear inside it. :chatgpt-content-reference{index="2"}
+- `$$` surrounds the function body, so ordinary single quotes can appear inside it. 
 
 ### Example 1: Add two numbers
 
@@ -128,7 +128,7 @@ Here, `:=` assigns a value to a PL/pgSQL variable. The `v_` prefix identifies a 
 
 ## 4. Read a table value in a function
 
-`SELECT ... INTO` assigns the result of a query to a PL/pgSQL variable. This differs from the standalone SQL command `SELECT INTO`, which creates a table. :chatgpt-content-reference{index="3"}
+`SELECT ... INTO` assigns the result of a query to a PL/pgSQL variable. This differs from the standalone SQL command `SELECT INTO`, which creates a table. 
 
 ### Example 3: Calculate annual salary
 
@@ -216,7 +216,7 @@ Expected result:
 | Bilal Ahmed | 62000.00 | Junior |
 | Sara Ali | 70000.00 | Mid-level |
 
-In PL/pgSQL, write `ELSIF` for an additional condition. Notice the explicit `IS NULL` check: comparisons such as `NULL < 70000` do not evaluate to true. :chatgpt-content-reference{index="4"}
+In PL/pgSQL, write `ELSIF` for an additional condition. Notice the explicit `IS NULL` check: comparisons such as `NULL < 70000` do not evaluate to true. 
 
 ### Example 5: Reject invalid input
 
@@ -246,11 +246,11 @@ SELECT calculate_bonus(70000, 10) AS bonus;
 
 Expected result: `7000.00`.
 
-`RAISE EXCEPTION` reports an error and stops the current operation. :chatgpt-content-reference{index="5"}
+`RAISE EXCEPTION` reports an error and stops the current operation. 
 
 ## 6. Return multiple rows
 
-A function can return a table. Use `RETURN QUERY` to append the rows produced by a query to its result. :chatgpt-content-reference{index="6"}
+A function can return a table. Use `RETURN QUERY` to append the rows produced by a query to its result. 
 
 ### Example 6: List employees in a department
 
@@ -360,7 +360,7 @@ $$;
 CALL procedure_name(argument);
 ```
 
-A procedure has no `RETURNS` clause. Call it with `CALL`, rather than putting it inside `SELECT`. :chatgpt-content-reference{index="7"}
+A procedure has no `RETURNS` clause. Call it with `CALL`, rather than putting it inside `SELECT`. 
 
 ## 9. Change table data with a procedure
 
@@ -411,7 +411,7 @@ WHERE employee_id = 2;
 
 ### Example 10: Make a procedure report a value with `INOUT`
 
-`INOUT` means a parameter supplies an initial value and receives a final value. When called as plain SQL, `CALL` displays its final value as a result row. :chatgpt-content-reference{index="8"}
+`INOUT` means a parameter supplies an initial value and receives a final value. When called as plain SQL, `CALL` displays its final value as a result row. 
 
 ```sql
 CREATE OR REPLACE PROCEDURE apply_increase(
@@ -451,11 +451,11 @@ END;
 $$;
 ```
 
-Expected message: `NOTICE: Updated amount: 1100.00`. Within PL/pgSQL, an `OUT` or `INOUT` argument in `CALL` must correspond to a variable that receives the value. :chatgpt-content-reference{index="9"}
+Expected message: `NOTICE: Updated amount: 1100.00`. Within PL/pgSQL, an `OUT` or `INOUT` argument in `CALL` must correspond to a variable that receives the value. 
 
 ## 10. Transaction control: an important procedure rule
 
-A procedure *can* execute `COMMIT` or `ROLLBACK`, but its `CALL` must meet PostgreSQL’s transaction rules. In particular, a procedure that commits must be invoked from the top level, outside an explicit `BEGIN ... COMMIT` transaction block. Functions cannot perform that transaction control. A PL/pgSQL `EXCEPTION` block also cannot end a transaction. :chatgpt-content-reference{index="10"}
+A procedure *can* execute `COMMIT` or `ROLLBACK`, but its `CALL` must meet PostgreSQL’s transaction rules. In particular, a procedure that commits must be invoked from the top level, outside an explicit `BEGIN ... COMMIT` transaction block. Functions cannot perform that transaction control. A PL/pgSQL `EXCEPTION` block also cannot end a transaction. 
 
 Here is a small demonstration. Run the `CALL` **as its own statement with autocommit enabled**:
 
