@@ -1,4 +1,4 @@
-## **cursors and triggers in PostgreSQL 18 PL/pgSQL**
+## **Cursors and Triggers in PL/pgSQL**
 
 This tutorial covers **cursors and triggers in PostgreSQL 18 PL/pgSQL**, with runnable examples, expected results, and classroom practice activities. Run the setup once, then work through the examples in order.
 
@@ -45,7 +45,7 @@ The examples use fully qualified table names, such as `cursor_trigger_lab.employ
 
 ---
 
-**2. What is a cursor?**
+**2. What is a Cursor?**
 
 A cursor gives you a position within a query result so you can retrieve and process rows gradually. In PL/pgSQL, cursor variables have the type `refcursor`. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
 
