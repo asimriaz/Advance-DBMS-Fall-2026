@@ -47,7 +47,7 @@ The examples use fully qualified table names, such as `cursor_trigger_lab.employ
 
 **2. What is a Cursor?**
 
-A cursor gives you a position within a query result so you can retrieve and process rows gradually. In PL/pgSQL, cursor variables have the type `refcursor`. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
+A cursor gives you a position within a query result so you can retrieve and process rows gradually. In PL/pgSQL, cursor variables have the type `refcursor`. [PostgreSQL Docs: PL/pgSQL Cursors](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
 
 For example, a query returns four employees. A cursor lets your code fetch Ayesha, process her row, then fetch Bilal, and continue.
 
@@ -104,11 +104,11 @@ NOTICE: ID: 4, Name: Hamza Noor, Salary: 95000.00
 
 `record` can hold the columns returned by the query. Each `FETCH` replaces its contents with the next row.
 
-Check `FOUND` immediately after `FETCH`: it becomes false when no row is retrieved. Placing `EXIT WHEN NOT FOUND` before processing prevents the loop from processing an empty fetch. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
+Check `FOUND` immediately after `FETCH`: it becomes false when no row is retrieved. Placing `EXIT WHEN NOT FOUND` before processing prevents the loop from processing an empty fetch. [PostgreSQL Docs: Using Cursors (FETCH and FOUND)](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
 
 **4. Example: use a cursor `FOR` loop**
 
-A cursor `FOR` loop handles opening, fetching, and closing automatically. Its loop record is also created automatically. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
+A cursor `FOR` loop handles opening, fetching, and closing automatically. Its loop record is also created automatically. [PostgreSQL Docs: Looping Through a Cursor's Result](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
 
 ```sql
 DO $$
@@ -156,7 +156,7 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-This query `FOR` loop uses a cursor internally, without an explicit cursor declaration. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-control-structures.html)
+This query `FOR` loop uses a cursor internally, without an explicit cursor declaration. [PostgreSQL Docs: Looping Through Query Results](https://www.postgresql.org/docs/18/plpgsql-control-structures.html)
 
 **5. Example: parameterized cursor**
 
@@ -200,7 +200,7 @@ Change `'HR'` to `'IT'` to process the IT employees.
 
 **6. Example: navigate with a scrollable cursor**
 
-Declare `SCROLL` when you need backward navigation. `FIRST`, `LAST`, `PRIOR`, and `ABSOLUTE` select particular positions. [postgresql.org](https://www.postgresql.org/docs/18/sql-fetch.html)
+Declare `SCROLL` when you need backward navigation. `FIRST`, `LAST`, `PRIOR`, and `ABSOLUTE` select particular positions. [PostgreSQL Docs: FETCH (Scrollable Cursors)](https://www.postgresql.org/docs/18/sql-fetch.html)
 
 ```sql
 DO $$
@@ -244,7 +244,7 @@ Here, “second” means the second row in the ordered query result, rather than
 
 **7. Example: update the current cursor row**
 
-`WHERE CURRENT OF` identifies the row on which the cursor is currently positioned. Use a suitable single-table query with `FOR UPDATE`. A cursor declared with `FOR UPDATE` cannot also use `SCROLL`. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
+`WHERE CURRENT OF` identifies the row on which the cursor is currently positioned. Use a suitable single-table query with `FOR UPDATE`. A cursor declared with `FOR UPDATE` cannot also use `SCROLL`. [PostgreSQL Docs: UPDATE/DELETE WHERE CURRENT OF](https://www.postgresql.org/docs/18/plpgsql-cursors.html)
 
 This example gives employees earning below `70000` an increase of `5000`. The outer transaction lets you inspect and then undo the change:
 
@@ -301,7 +301,7 @@ The cursor version is useful for learning how current-row updates work.
 
 **8. Example: return a cursor from a function**
 
-A function can open a cursor and return its name. The caller then fetches rows in the **same session and transaction**. These PL/pgSQL cursors close when the transaction ends. [postgresql.org](https://www.postgresql.org/docs/18/sql-declare.html)
+A function can open a cursor and return its name. The caller then fetches rows in the **same session and transaction**. These PL/pgSQL cursors close when the transaction ends. [PostgreSQL Docs: DECLARE (Cursor Lifetime)](https://www.postgresql.org/docs/18/sql-declare.html)
 
 ```sql
 CREATE OR REPLACE FUNCTION cursor_trigger_lab.open_department_cursor(
@@ -342,13 +342,13 @@ COMMIT;
 
 The first `FETCH` returns Ayesha. `FETCH ALL` returns the **remaining** row, Bilal.
 
-These standalone SQL `FETCH` commands display query rows. Inside PL/pgSQL, `FETCH ... INTO` assigns one row to variables. [postgresql.org](https://www.postgresql.org/docs/18/sql-fetch.html)
+These standalone SQL `FETCH` commands display query rows. Inside PL/pgSQL, `FETCH ... INTO` assigns one row to variables. [PostgreSQL Docs: FETCH Command](https://www.postgresql.org/docs/18/sql-fetch.html)
 
 ---
 
 **9. What is a trigger?**
 
-A trigger runs automatically in response to a specified table event. You create a trigger function, then attach it to a table with `CREATE TRIGGER`. [postgresql.org](https://www.postgresql.org/docs/18/sql-createtrigger.html)
+A trigger runs automatically in response to a specified table event. You create a trigger function, then attach it to a table with `CREATE TRIGGER`. [PostgreSQL Docs: CREATE TRIGGER](https://www.postgresql.org/docs/18/sql-createtrigger.html)
 
 Typical uses include validating incoming data, filling timestamps, recording changes, and protecting particular rows.
 
@@ -358,7 +358,7 @@ Typical uses include validating incoming data, filling timestamps, recording cha
 | `AFTER` | Record an operation after it occurs |
 | `INSTEAD OF` | Implement writes through a view |
 
-A row trigger runs for each affected row. A statement trigger runs once for the statement—even if it affects zero rows. [postgresql.org](https://www.postgresql.org/docs/18/trigger-definition.html)
+A row trigger runs for each affected row. A statement trigger runs once for the statement—even if it affects zero rows. [PostgreSQL Docs: Row vs. Statement Triggers](https://www.postgresql.org/docs/18/trigger-definition.html)
 
 **10. Understand `NEW`, `OLD`, and trigger return values**
 
@@ -372,7 +372,7 @@ For row triggers:
 
 Useful trigger variables include `TG_OP` for the operation and `TG_TABLE_NAME` for the table.
 
-A `BEFORE INSERT/UPDATE` row trigger normally returns `NEW`; a `BEFORE DELETE` row trigger normally returns `OLD`. Returning `NULL` from a `BEFORE` row trigger skips that row’s operation. For `AFTER` and statement triggers, the return value is ignored. [postgresql.org](https://www.postgresql.org/docs/18/plpgsql-trigger.html)
+A `BEFORE INSERT/UPDATE` row trigger normally returns `NEW`; a `BEFORE DELETE` row trigger normally returns `OLD`. Returning `NULL` from a `BEFORE` row trigger skips that row’s operation. For `AFTER` and statement triggers, the return value is ignored. [PostgreSQL Docs: Trigger Functions and Return Values](https://www.postgresql.org/docs/18/plpgsql-trigger.html)
 
 **11. Example: reject negative salaries**
 
@@ -508,7 +508,7 @@ WHEN (OLD.salary IS DISTINCT FROM NEW.salary)
 EXECUTE FUNCTION cursor_trigger_lab.audit_salary_change();
 ```
 
-The `WHEN` condition prevents an audit entry when the salary value remains unchanged. `UPDATE OF salary` means the column was named in the update; it does not by itself prove that its value changed. [postgresql.org](https://www.postgresql.org/docs/18/sql-createtrigger.html)
+The `WHEN` condition prevents an audit entry when the salary value remains unchanged. `UPDATE OF salary` means the column was named in the update; it does not by itself prove that its value changed. [PostgreSQL Docs: CREATE TRIGGER (WHEN Condition)](https://www.postgresql.org/docs/18/sql-createtrigger.html)
 
 Test:
 
@@ -532,7 +532,7 @@ Expected audit row:
 |---:|---:|---:|
 | 1 | 85000.00 | 90000.00 |
 
-The salary update and audit insert belong to the same transaction. `ROLLBACK` undoes both. An `AFTER` trigger runs before transaction commit; it does not independently commit its audit record. [postgresql.org](https://www.postgresql.org/docs/18/trigger-definition.html)
+The salary update and audit insert belong to the same transaction. `ROLLBACK` undoes both. An `AFTER` trigger runs before transaction commit; it does not independently commit its audit record. [PostgreSQL Docs: Trigger Behavior and Transactions](https://www.postgresql.org/docs/18/trigger-definition.html)
 
 **14. Example: protect HR employees from deletion**
 
@@ -628,7 +628,7 @@ ALTER TABLE cursor_trigger_lab.employees
 ENABLE TRIGGER trg_report_update_statement;
 ```
 
-These commands require suitable table privileges. [postgresql.org](https://www.postgresql.org/docs/18/sql-altertable.html)
+These commands require suitable table privileges. [PostgreSQL Docs: ALTER TABLE (Enable/Disable Triggers)](https://www.postgresql.org/docs/18/sql-altertable.html)
 
 List the schema’s triggers:
 
