@@ -1,0 +1,27 @@
+services:
+  mongodb:
+    container_name: mongo-db
+    image: mongo:8.0
+    environment:
+      - GLIBC_TUNABLES=glibc.pthread.rseq=0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+      - "8080:8080"      # Compass's port is published here now
+    volumes:
+      - mongodb_data:/data/db
+
+  compass:
+    container_name: compass
+    image: haohanyang/compass-web:latest
+    restart: unless-stopped
+    network_mode: "service:mongodb"   # share mongodb's network
+    environment:
+      CW_HOST: "0.0.0.0"
+      CW_MONGO_URI: "mongodb://localhost:27017"
+      CW_ENABLE_SHELL: "true"
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb_data:
