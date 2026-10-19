@@ -1,12 +1,6 @@
 # MongoDB Tutorial
 
-A topic-by-topic tutorial that follows the course slides: **Intro → Installation → MongoDB Shell → Types → CRUD → Queries → Updates → Delete → Aggregate → Indexes → Utilities**.
 
-All commands are written for **mongosh**, the current MongoDB Shell. The slides were made with the older `mongo` shell (removed in MongoDB 6.0), so wherever the slides use a legacy command such as `insert()`, `update()`, `remove()` or `cursor.count()`, you will find a **Legacy (slides)** note showing that form next to the modern one.
-
-Most examples use a practice collection, `school.students`. The slides' own examples use `persons` and `shoppingCart` collections, and those appear where they explain a feature best.
-
----
 
 ## Contents
 
@@ -155,11 +149,11 @@ MongoDB does **not** store JSON text. It stores documents in **BSON**, a binary 
 | Null       | Null |
 | (none)     | Regular Expression, Timestamp, Binary data, Date, ObjectId, and others |
 
-The problem the slides point out with a "?": JSON has only one `Number` type and has no Date or ObjectId at all. So how do you write a BSON Date or a 32-bit integer in plain JSON text? The answer is **Extended JSON**.
+The problem: JSON has only one `Number` type and has no Date or ObjectId at all. So how do you write a BSON Date or a 32-bit integer in plain JSON text? The answer is **Extended JSON**.
 
 ### 1.4 Extended JSON
 
-Extended JSON is a way of writing BSON types as text. The slides describe two modes:
+Extended JSON is a way of writing BSON types as text. It has two modes:
 
 | Shell Mode | Strict Mode |
 |------------|-------------|
@@ -193,7 +187,7 @@ Strict mode:
 }
 ```
 
-> **Modern naming.** Current MongoDB documentation calls these Extended JSON v2 modes **Canonical** (preserves every type exactly, e.g. `{"$numberInt": "39"}`) and **Relaxed** (more readable, e.g. plain `39` for an int). "Strict" and "Shell" mode are the older (v1) names the slides use. The idea is the same: `$`-prefixed keys represent types JSON doesn't have.
+> **Modern naming.** Current MongoDB documentation calls these Extended JSON v2 modes **Canonical** (preserves every type exactly, e.g. `{"$numberInt": "39"}`) and **Relaxed** (more readable, e.g. plain `39` for an int). "Strict" and "Shell" mode are the older (v1) names. The idea is the same: `$`-prefixed keys represent types JSON doesn't have.
 
 ### 1.5 MongoDB Structure
 
@@ -220,7 +214,7 @@ MongoDB is a set of programs:
 | Program | Role |
 |---------|------|
 | `mongod` | The **database server** (daemon). It stores data and answers requests. |
-| `mongosh` | The **shell** client (replaces the old `mongo` shell from the slides). |
+| `mongosh` | The **shell** client (replaces the old `mongo` shell). |
 | `mongodump` / `mongorestore` | Binary backup and restore. |
 | `mongoexport` / `mongoimport` | Export/import JSON or CSV. |
 | `mongostat` / `mongotop` | Live monitoring. |
@@ -267,7 +261,7 @@ Since MongoDB 4.4/5.0 the pieces are downloaded separately:
 1. **MongoDB Community Server** (`mongod`): https://www.mongodb.com/try/download/community
 2. **mongosh** (the shell): https://www.mongodb.com/try/download/shell
 3. **MongoDB Database Tools** (`mongodump`, `mongoexport`, `mongoimport`, `mongostat`, `mongotop` ...): https://www.mongodb.com/try/download/database-tools
-4. Optional GUI: **MongoDB Compass** (official). The slides also mention **Robo 3T**, which is no longer maintained; Studio 3T is its successor.
+4. Optional GUI: **MongoDB Compass** (official). **Robo 3T** is another GUI, though no longer maintained; Studio 3T is its successor.
 
 **Windows:** run the `.msi` installer and choose "Install MongoDB as a Service". Add the `bin` folders of mongosh and the tools to your `PATH`.
 
@@ -316,7 +310,7 @@ The default port is **27017**.
 
 The MongoDB Shell is a **JavaScript** environment connected to a MongoDB server. You can type normal JavaScript (variables, loops, functions) as well as database commands.
 
-- Slides: the legacy `mongo` shell used the **SpiderMonkey** engine from v3.2 and supported **ES6**.
+- The legacy `mongo` shell used the **SpiderMonkey** engine from v3.2 and supported **ES6**.
 - Today: **mongosh** runs on **Node.js**, so it supports modern JavaScript (ES2020+, `async/await`, arrow functions, `let/const`).
 
 ```javascript
@@ -329,7 +323,7 @@ square(9)        // 81
 
 ### 3.2 Checking versions
 
-| What | mongosh | Legacy (slides) |
+| What | mongosh | Legacy |
 |------|---------|-----------------|
 | Server version, from the OS | `mongod --version` | same |
 | Server version, from the shell | `db.version()` | same |
@@ -453,7 +447,7 @@ Layout in current MongoDB versions:
 | 5 | Random value, unique per machine and process |
 | 3 | Counter, starting from a random number |
 
-> The slides show the older layout (4 bytes time, 3 bytes machine id, 2 bytes process id, 3 bytes counter). The total is still 12 bytes and the timestamp is still first, which is why ObjectIds sort roughly by creation time.
+> Older MongoDB versions used a different layout (4 bytes time, 3 bytes machine id, 2 bytes process id, 3 bytes counter). The total is still 12 bytes and the timestamp is still first, which is why ObjectIds sort roughly by creation time.
 
 You can read the creation time back:
 
@@ -477,7 +471,7 @@ Converting values to dates (results shown in UTC):
 | Input | Stored as |
 |-------|-----------|
 | `new Date("2018-08-08")` | `ISODate("2018-08-08T00:00:00Z")` |
-| `new Date("August 8, 2018 13:15:00")` | interpreted in the shell's **local time zone** (the slide's output `10:15:00Z` comes from a UTC+3 machine) |
+| `new Date("August 8, 2018 13:15:00")` | interpreted in the shell's **local time zone** (on a UTC+3 machine it becomes `2018-08-08T10:15:00Z`) |
 | `new Date(2018, 7, 8)` | months start at 0, so `7` = August; also local time (`2018-08-07T21:00:00Z` on a UTC+3 machine) |
 | `ISODate("2018-08-08T08:22:55.160Z")` | exactly that UTC instant |
 
@@ -541,7 +535,7 @@ db.dropDatabase()                       // (5) delete the active database
 |--------|---------|---------|
 | `insertOne(<object>)` | one document | `{ acknowledged, insertedId }` |
 | `insertMany(<array>)` | many documents | `{ acknowledged, insertedIds }` |
-| `insert(<object or array>)` | **Legacy (slides)**, deprecated in mongosh | `WriteResult` / `BulkWriteResult` |
+| `insert(<object or array>)` | **Legacy**, deprecated in mongosh | `WriteResult` / `BulkWriteResult` |
 
 **insertOne()**
 
@@ -592,7 +586,7 @@ By default `insertMany` is **ordered**: if one document fails (e.g. duplicate `_
 db.students.insertMany([ /* docs */ ], { ordered: false })
 ```
 
-**Legacy (slides):** `insert()`
+**Legacy:** `insert()`
 
 ```javascript
 db.students.insert({ name: "Old Style", age: 20 })
@@ -699,7 +693,7 @@ db.students.find().sort({ name: 1 }).skip(5).limit(5) // "page 2" with 5 per pag
 
 **Counting**
 
-| Task | mongosh | Legacy (slides) |
+| Task | mongosh | Legacy |
 |------|---------|-----------------|
 | Count matching documents | `db.students.countDocuments({ class: "BSCS-4" })` | `db.students.find({ class: "BSCS-4" }).count()` |
 | Fast approximate total | `db.students.estimatedDocumentCount()` | `db.students.count()` |
@@ -990,7 +984,7 @@ Common options: `i` case-insensitive, `m` multiline, `x` ignore whitespace, `s` 
 | `updateOne(filter, update, options)` | first matching document | `{ acknowledged, matchedCount, modifiedCount, upsertedId }` |
 | `updateMany(filter, update, options)` | all matching documents | same |
 | `replaceOne(filter, replacement, options)` | replaces the whole first matching document | same |
-| `update(filter, update, options)` | **Legacy (slides)**, one document, or many with `{ multi: true }` | `WriteResult` |
+| `update(filter, update, options)` | **Legacy**, one document, or many with `{ multi: true }` | `WriteResult` |
 
 General syntax:
 
@@ -1019,7 +1013,7 @@ db.students.updateOne({ regno: "FA22-BCS-001" }, { $set: { city: "Lahore" } })
 | matched but value already the same | 1 | 0 |
 | nothing matched | 0 | 0 |
 
-**Legacy (slides)** equivalent output: `WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })`.
+**Legacy** equivalent output: `WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 0 })`.
 
 ### 7.3 Field update operators
 
@@ -1046,7 +1040,7 @@ db.students.updateOne(
 )
 ```
 
-Slide example (shoppingCart):
+Another example (shoppingCart):
 
 ```javascript
 db.shoppingCart.updateOne(
@@ -1120,7 +1114,7 @@ db.students.updateMany({ city: "Lahore" }, { $set: { campus: "Lahore Campus" } }
 db.students.updateMany({}, { $set: { active: true } })   // every document
 ```
 
-**Legacy (slides):** `update()` updates only the **first** match unless you pass `{ multi: true }`:
+**Legacy:** `update()` updates only the **first** match unless you pass `{ multi: true }`:
 
 ```javascript
 db.students.update({ city: "Lahore" }, { $set: { campus: "Lahore Campus" } }, { multi: true })
@@ -1246,7 +1240,7 @@ db.students.updateOne(
 )
 ```
 
-**All elements (`$[]`)** and **filtered elements (`$[x]` + `arrayFilters`)**, beyond the slides but very useful:
+**All elements (`$[]`)** and **filtered elements (`$[x]` + `arrayFilters`)**:
 
 ```javascript
 // mark every fee of every student as paid
@@ -1294,8 +1288,8 @@ You can delete **documents**, **collections**, and **databases**.
 |--------|---------|---------|
 | `deleteOne(filter)` | first matching document | `{ acknowledged, deletedCount }` |
 | `deleteMany(filter)` | all matching documents | `{ acknowledged, deletedCount }` |
-| `remove(filter)` | **Legacy (slides)**, all matches | `WriteResult({ nRemoved })` |
-| `remove(filter, true)` | **Legacy (slides)**, one match | `WriteResult({ nRemoved: 1 })` |
+| `remove(filter)` | **Legacy**, all matches | `WriteResult({ nRemoved })` |
+| `remove(filter, true)` | **Legacy**, one match | `WriteResult({ nRemoved: 1 })` |
 
 ```javascript
 db.students.deleteOne({ regno: "FA24-BCS-100" })
@@ -1314,7 +1308,7 @@ db.students.deleteMany({ marks: { $lt: 50 } })
 > db.students.deleteMany({ marks: { $lt: 50 } })  // then delete
 > ```
 
-**Legacy (slides):**
+**Legacy:**
 
 ```javascript
 db.students.remove({ class: "BSSE-8" })         // WriteResult({ "nRemoved" : 5 })
@@ -1497,7 +1491,7 @@ db.students.aggregate([
 // { classCount: 4 }
 ```
 
-**Different ways to count** (from the slides, timed on 1000 documents):
+**Different ways to count** (timed on 1000 documents):
 
 | Command | Where counting happens | Speed |
 |---------|------------------------|-------|
@@ -1687,7 +1681,7 @@ db.students.aggregate([
 
 ### 9.12 Expression ("unary") operators
 
-The slides call these **unary operators**: operators like `$type`, `$multiply`, `$gt`, `$and`, `$or` used as **expressions** that compute a value per document.
+Sometimes called **unary operators**, these are operators like `$type`, `$multiply`, `$gt`, `$and`, `$or` used as **expressions** that compute a value per document.
 
 - They are usually used in `$project` (or `$addFields`).
 - In `$group`, they can only be used **inside an accumulator**, e.g. `{ $sum: { $multiply: [...] } }`.
@@ -1825,7 +1819,7 @@ db.students.getIndexes()
 [ { v: 2, key: { _id: 1 }, name: "_id_" } ]
 ```
 
-(Older servers, as on the slides, also show an `ns: "myDb.persons"` field.)
+(Older servers also show an `ns: "myDb.persons"` field.)
 
 ### 10.4 Creating indexes: `createIndex()`
 
@@ -1854,7 +1848,7 @@ The automatic name is `<field>_<direction>`, e.g. `age_1`, `name_1`.
 |--------|---------|
 | `{ unique: true }` | no two documents may have the same value |
 | `{ name: "<indexName>" }` | custom name |
-| `{ background: true }` | (slides) build without blocking other operations. **Ignored since MongoDB 4.2**, where all builds use an optimized process that only locks briefly at the start and end. |
+| `{ background: true }` | (legacy) build without blocking other operations. **Ignored since MongoDB 4.2**, where all builds use an optimized process that only locks briefly at the start and end. |
 | `{ sparse: true }` | only index documents that have the field |
 | `{ expireAfterSeconds: N }` | TTL index: delete documents N seconds after a date field |
 | `{ partialFilterExpression: {...} }` | index only documents matching a filter |
@@ -1882,7 +1876,7 @@ db.students.createIndex({ marks: -1 }, { name: "marksDescIndex" })
 db.students.createIndex({ city: 1 }, { background: true })   // accepted, but the option has no effect on 4.2+
 ```
 
-**Compound index** (beyond the slides): one index on several fields, useful when you filter on one field and sort on another:
+**Compound index**: one index on several fields, useful when you filter on one field and sort on another:
 
 ```javascript
 db.students.createIndex({ class: 1, marks: -1 })
@@ -1984,7 +1978,7 @@ These command-line tools are part of **MongoDB Database Tools** (a separate down
 
 ```bash
 --uri "mongodb://user:pass@host:27017/?authSource=admin"
-# or the separate options the slides use:
+# or separate options:
 --host <hostname> --port 27017 --username <user> --password <pass> --authenticationDatabase <authDb>
 ```
 
@@ -2001,7 +1995,7 @@ mongoexport --db school --collection students --type=csv --fields name,age,class
 mongoexport --db school --collection students --query '{"class":"BSCS-4"}' --out bscs4.json
 ```
 
-Remote server (as in the slides):
+Remote server:
 
 ```bash
 mongoexport --host <hostname> --username admin --password <password> --authenticationDatabase admin \
@@ -2106,7 +2100,7 @@ local.startup_log     0ms    0ms     0ms
 
 ## 12. Legacy shell vs mongosh cheat sheet
 
-| Task | Legacy `mongo` shell (slides) | `mongosh` (use this) |
+| Task | Legacy `mongo` shell | `mongosh` (use this) |
 |------|-------------------------------|----------------------|
 | Start shell | `mongo` | `mongosh` |
 | Shell version | `mongo --version` | `mongosh --version` |
