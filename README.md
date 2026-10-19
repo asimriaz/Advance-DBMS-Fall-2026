@@ -38,6 +38,11 @@ Create one folder for everything:
 $ mkdir -p ~/docker-lab && cd ~/docker-lab
 ```
 
+### Enabe Docker Hub Cache
+```bash
+echo '{ "dns": ["8.8.8.8", "1.1.1.1"], "insecure-registries": ["10.0.149.224:5001"], "registry-mirrors": ["http://10.0.149.224:5001"] }' | sudo tee /etc/docker/daemon.json && sudo systemctl restart docker
+```
+
 ## Lab 0 — Install Docker and verify
 
 **Goal:** a working Docker Engine, CLI, and Compose plugin, proven by running `hello-world`.
