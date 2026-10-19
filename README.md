@@ -1,6 +1,14 @@
+### Load collection in MongoDB
 ```
 docker exec -i mongo-db mongoimport --jsonArray -d academic -c courses < courses.json
 ```
+
+### Use mongoshell
+```
+docker exec -it mongo-db mongosh
+```
+
+
 <details>
 <summary><b>Install Node.js with NVM</b></summary>
 
