@@ -1,4 +1,6 @@
-
+```
+docker exec -i mongo-db mongoimport --jsonArray -d academic -c courses < courses.json
+```
 <details>
 <summary><b>Install Node.js with NVM</b></summary>
 
