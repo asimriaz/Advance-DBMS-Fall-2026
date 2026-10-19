@@ -1,3 +1,8 @@
+### Download JSON folder
+```
+npx degit asimriaz/Advance-DBMS-Fall-2026/JSON#NoSQL JSON
+```
+
 ### Load collection in MongoDB
 ```
 docker exec -i mongo-db mongoimport --jsonArray -d academic -c courses < courses.json
