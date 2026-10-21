@@ -387,14 +387,10 @@ import util from "node:util";
 import { db } from "./models.js";
 
 db.Course.find()
-  .then((docs) => {
-    const opts = { depth: null, colors: true };
-    console.log(
-      "[\n" + docs.map((d) => "  " + util.inspect(d, opts)).join(",\n") + "\n]",
-    );
-  })
-  .then(() => process.exit())
-  .catch(console.error);
+.then(docs => console.log(
+  `[\n${docs.map((doc) => `  ${util.inspect(doc, { colors: true, breakLength: Infinity })}`)
+  .join(",\n")}\n]`))
+.then(() => process.exit())
 ```
 
 What it does:
