@@ -175,10 +175,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
-
 The loop variable `i` is created automatically.
 
+Use the `BY` clause to set the step:
+
+```sql
+DO $$
+BEGIN
+    FOR i IN 1..10 BY 2 LOOP
+        RAISE NOTICE 'Number: %', i;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+This prints 1, 3, 5, 7, 9. The step must be a positive number. If it's zero or negative, PostgreSQL raises an error. You can only even numbers from 1 to 10, start at 2: `FOR i IN 2..10 BY 2`.
+
 ## 9. Reverse FOR loop
+To step backwards, add `REVERSE` and swap the bounds, so the upper bound comes first:
 
 ```sql
 DO $$
@@ -191,6 +205,12 @@ $$ LANGUAGE plpgsql;
 ```
 
 Output goes from `5` to `1`.
+
+```sql
+FOR i IN REVERSE 10..1 BY 2 LOOP
+    RAISE NOTICE 'Number: %', i;   -- 10, 8, 6, 4, 2
+END LOOP;
+```
 
 ## 10. WHILE loop
 
