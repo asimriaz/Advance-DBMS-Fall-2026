@@ -33,6 +33,11 @@ HQ stores no student rows: it reads and writes them at the campuses through post
 
 ## Part A: Start three PostgreSQL 18 nodes
 
+Download the zip file
+```
+wget https://raw.githubusercontent.com/asimriaz/Advance-DBMS-Fall-2026/refs/heads/Lecture-10/ddb-lab-pg18-kit.zip
+```
+
 One `compose.yaml` starts all three sites on a private Docker network, where they reach each other by the names `hq`, `lhr` and `khi`.
 
 ```yaml
