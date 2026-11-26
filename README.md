@@ -31,12 +31,23 @@ HQ stores no student rows: it reads and writes them at the campuses through post
 
 **Time.** About 3 hours: Parts A to D in the first session, E to G and the tasks in the second.
 
-## Part A: Start three PostgreSQL 18 nodes
-
+## Instructions
 Download the zip file
 ```
 wget https://raw.githubusercontent.com/asimriaz/Advance-DBMS-Fall-2026/refs/heads/Lecture-10/ddb-lab-pg18-kit.zip
 ```
+Install unzip
+```
+sudo apt install unzip
+```
+Unzip `ddb-lab-pg18-kit.zip` file
+```
+unzip ddb-lab-pg18-kit.zip
+```
+
+
+## Part A: Start three PostgreSQL 18 nodes
+
 
 One `compose.yaml` starts all three sites on a private Docker network, where they reach each other by the names `hq`, `lhr` and `khi`.
 
