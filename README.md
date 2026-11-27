@@ -38,7 +38,7 @@ wget https://raw.githubusercontent.com/asimriaz/Advance-DBMS-Fall-2026/refs/head
 ```
 Install unzip
 ```
-sudo apt install unzip
+sudo apt install unzip -y
 ```
 Unzip `ddb-lab-pg18-kit.zip` file
 ```
